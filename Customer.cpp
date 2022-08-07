@@ -1,102 +1,83 @@
 // Customer.cc
-#include <sstream>
+
 #include <vector>
 #include "Customer.h"
 
 using std::ostringstream;
 using std::vector;
 
-struct stPrintEach
+
+Customer::Customer() {}
+
+Customer::Customer(const std::string& name) :
+	customerName(name) {}
+
+void Customer::addRental(const Rental& arg) { customerRentals.push_back(arg); }
+
+std::string Customer::getName() const { return customerName; }
+
+std::string  Customer::PrintReceiptDetails()
 {
-    char szName[100] = "";
-    char szType[100] = "";
-    int iDayRent = 0;
-    double dAmount = 0;
-};
+	std::ostringstream result;
+	std::vector< Rental >::iterator iter = customerRentals.begin();
+	std::vector< Rental >::iterator iter_end = customerRentals.end();
+	stPrintEach PrintInfo;
+
+	result << "장르\t제목\t대여기간\t가격\t" << std::endl;
+	for (; iter != iter_end; ++iter)
+	{
+		Rental each = *iter;
+		strcpy_s(PrintInfo.szType, sizeof(PrintInfo.szType), each.getMovie().getTypeName());
+		strcpy_s(PrintInfo.szName, sizeof(PrintInfo.szName), each.getMovie().getTitle().c_str());
+		PrintInfo.iDayRent = each.getDaysRented();
+		PrintInfo.dAmount = each.getCalcAmount();
+
+		result << "(" << PrintInfo.szName << "\t" << PrintInfo.szName << "\t" 
+			<< PrintInfo.iDayRent << "\t" << PrintInfo.dAmount << ")" << std::endl;
+
+	}
+
+	return result.str();
+}
+
 
 std::string Customer::statement()
 {
-  double totalAmount = 0.;
-  int frequentRenterPoints = 0;
+  dTotalAmount=0.;
+  dfrequentRenterPoints = 0;
 
   std::vector< Rental >::iterator iter = customerRentals.begin();
   std::vector< Rental >::iterator iter_end = customerRentals.end();
 
   int PrintSize = customerRentals.size();
-  stPrintEach* PrintEach = new stPrintEach[PrintSize];
 
   // result will be returned by statement()
   std::ostringstream result;
   result << "Rental Record for " << getName() << "\n";
 
-
   // Loop over customer's rentals
   int iPrintIdx = 0;
   for ( ; iter != iter_end; ++iter ) {
 
-    double thisAmount = 0.;
-    Rental each = *iter;
-    strcpy_s(PrintEach[iPrintIdx].szName, sizeof(PrintEach[iPrintIdx].szName), each.getMovie().getTitle().c_str());
-    PrintEach[iPrintIdx].iDayRent = each.getDaysRented();
-
+    Rental each = *iter;   
     // Determine amounts for each rental
-    switch ( each.getMovie().getPriceCode() ) {
-
-      case eREGULAR:
-        thisAmount += 2.;
-        if ( each.getDaysRented() > 2 )
-          thisAmount += ( each.getDaysRented() - 2 ) * 1.5 ;
-        strcpy_s(PrintEach[iPrintIdx].szType, sizeof(PrintEach[iPrintIdx].szType), "REGULAR");
-        break;
-
-      case eNEW_RELEASE:
-        thisAmount += each.getDaysRented() * 3;
-        strcpy_s(PrintEach[iPrintIdx].szType, sizeof(PrintEach[iPrintIdx].szType), "NEW_RELEASE");
-        break;
-
-      case eCHILDRENS:
-        thisAmount += 1.5;
-        if ( each.getDaysRented() > 3 )
-          thisAmount += ( each.getDaysRented() - 3 ) * 1.5;
-        strcpy_s(PrintEach[iPrintIdx].szType, sizeof(PrintEach[iPrintIdx].szType), "CHILDRENS");
-        break;
-      case eEXAMPLE_GENRE:
-          thisAmount += 1;
-          if (each.getDaysRented() > 1)
-          {
-              thisAmount += (each.getDaysRented() - 1) * 1.5;
-          }
-          strcpy_s(PrintEach[iPrintIdx].szType, sizeof(PrintEach[iPrintIdx].szType), "EXAMPLE_GENRE");
-          break;
-    }
+    double thisAmount = each.getCalcAmount();
 
     // Add frequent renter points
-    frequentRenterPoints++;
+	dfrequentRenterPoints +=each.getCalcPoint();
 
-    // Add bonus for a two day new release rental
-    if ( ( each.getMovie().getPriceCode() == eNEW_RELEASE )
-         && each.getDaysRented() > 1 ) frequentRenterPoints++;
-    if ((each.getMovie().getPriceCode() == eEXAMPLE_GENRE) &&
-        (each.getDaysRented() > 1)) frequentRenterPoints += (each.getDaysRented() - 1) * 1;
     // Show figures for this rental
     result << "\t" << each.getMovie().getTitle() << "\t"
            << thisAmount << std::endl;
-    totalAmount += thisAmount;
+	dTotalAmount += thisAmount;
 
-    PrintEach[iPrintIdx].dAmount = thisAmount;
-    iPrintIdx++;
   }
 
   // Add footer lines
-  result << "Amount owed is " << totalAmount << "\n";
-  result << "You earned " << frequentRenterPoints
+  result << "Amount owed is " << dTotalAmount << "\n";
+  result << "You earned " << dfrequentRenterPoints
          << " frequent renter points"<<std::endl;
   //add details
-  result << "장르\t제목\t대여기간\t가격\t" << std::endl;
-  for (int idx = 0; idx < PrintSize; idx++)
-  {
-      result << "(" << PrintEach[idx].szType << "\t" << PrintEach[idx].szName << "\t" << PrintEach[idx].iDayRent << "\t" << PrintEach[idx].dAmount << ")" << std::endl;
-  }
-  delete[] PrintEach;
+  result << PrintReceiptDetails();
   return result.str();
 }

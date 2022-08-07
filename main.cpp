@@ -14,8 +14,9 @@ int main()
     Movie children2{ "어린이 2", eCHILDRENS };
     Movie newGen1{ "신규세대 1", eEXAMPLE_GENRE };
     Movie newGen2{ "신규세대 2", eEXAMPLE_GENRE };
-
-    Customer customer{ "고객" };
+    Movie newGen3{ "신규세대 3", eEXAMPLE_GENRE };
+    Movie regular3{ "일반 3", eREGULAR };
+    Customer customer{ "고객 1" };
 
     customer.addRental({ regular1, 2 });
     customer.addRental({ regular2, 3 });
@@ -25,8 +26,12 @@ int main()
     customer.addRental({ children2, 4 });
     customer.addRental({ newGen1, 4 });
     customer.addRental({ newGen2, 2 });
+    customer.addRental({ newGen3, 3 });
+    customer.addRental({ regular3, 4 });
 
     cout << customer.statement() << endl;
+
+
 
     return 0;
 }
