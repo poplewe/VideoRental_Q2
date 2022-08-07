@@ -11,7 +11,7 @@ struct stPrintEach
     char szName[100] = "";
     char szType[100] = "";
     int iDayRent = 0;
-    int iAmount = 0;
+    double dAmount = 0;
 };
 
 std::string Customer::statement()
@@ -42,25 +42,25 @@ std::string Customer::statement()
     // Determine amounts for each rental
     switch ( each.getMovie().getPriceCode() ) {
 
-      case Movie::REGULAR:
+      case eREGULAR:
         thisAmount += 2.;
         if ( each.getDaysRented() > 2 )
           thisAmount += ( each.getDaysRented() - 2 ) * 1.5 ;
         strcpy_s(PrintEach[iPrintIdx].szType, sizeof(PrintEach[iPrintIdx].szType), "REGULAR");
         break;
 
-      case Movie::NEW_RELEASE:
+      case eNEW_RELEASE:
         thisAmount += each.getDaysRented() * 3;
         strcpy_s(PrintEach[iPrintIdx].szType, sizeof(PrintEach[iPrintIdx].szType), "NEW_RELEASE");
         break;
 
-      case Movie::CHILDRENS:
+      case eCHILDRENS:
         thisAmount += 1.5;
         if ( each.getDaysRented() > 3 )
           thisAmount += ( each.getDaysRented() - 3 ) * 1.5;
         strcpy_s(PrintEach[iPrintIdx].szType, sizeof(PrintEach[iPrintIdx].szType), "CHILDRENS");
         break;
-      case Movie::EXAMPLE_GENRE:
+      case eEXAMPLE_GENRE:
           thisAmount += 1;
           if (each.getDaysRented() > 1)
           {
@@ -74,16 +74,16 @@ std::string Customer::statement()
     frequentRenterPoints++;
 
     // Add bonus for a two day new release rental
-    if ( ( each.getMovie().getPriceCode() == Movie::NEW_RELEASE )
+    if ( ( each.getMovie().getPriceCode() == eNEW_RELEASE )
          && each.getDaysRented() > 1 ) frequentRenterPoints++;
-    if ((each.getMovie().getPriceCode() == Movie::EXAMPLE_GENRE) &&
+    if ((each.getMovie().getPriceCode() == eEXAMPLE_GENRE) &&
         (each.getDaysRented() > 1)) frequentRenterPoints += (each.getDaysRented() - 1) * 1;
     // Show figures for this rental
     result << "\t" << each.getMovie().getTitle() << "\t"
            << thisAmount << std::endl;
     totalAmount += thisAmount;
 
-    PrintEach[iPrintIdx].iAmount = thisAmount;
+    PrintEach[iPrintIdx].dAmount = thisAmount;
     iPrintIdx++;
   }
 
@@ -95,7 +95,7 @@ std::string Customer::statement()
   result << "장르\t제목\t대여기간\t가격\t" << std::endl;
   for (int idx = 0; idx < PrintSize; idx++)
   {
-      result << "(" << PrintEach[idx].szType << "\t" << PrintEach[idx].szName << "\t" << PrintEach[idx].iDayRent << "\t" << PrintEach[idx].iAmount << ")" << std::endl;
+      result << "(" << PrintEach[idx].szType << "\t" << PrintEach[idx].szName << "\t" << PrintEach[idx].iDayRent << "\t" << PrintEach[idx].dAmount << ")" << std::endl;
   }
   delete[] PrintEach;
   return result.str();

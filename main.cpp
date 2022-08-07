@@ -6,14 +6,14 @@ using namespace std;
 
 int main()
 {
-    Movie regular1{ "일반 1", Movie::REGULAR };
-    Movie regular2{ "일반 2", Movie::REGULAR };
-    Movie newRelease1{ "신작 1", Movie::NEW_RELEASE };
-    Movie newRelease2{ "신작 2",Movie::NEW_RELEASE };
-    Movie children1{ "어린이 1", Movie::CHILDRENS };
-    Movie children2{ "어린이 2", Movie::CHILDRENS };
-    Movie newGen1{ "신규세대 1", Movie::EXAMPLE_GENRE };
-    Movie newGen2{ "신규세대 2", Movie::EXAMPLE_GENRE };
+    Movie regular1{ "일반 1", eREGULAR };
+    Movie regular2{ "일반 2", eREGULAR };
+    Movie newRelease1{ "신작 1", eNEW_RELEASE };
+    Movie newRelease2{ "신작 2",eNEW_RELEASE };
+    Movie children1{ "어린이 1", eCHILDRENS };
+    Movie children2{ "어린이 2", eCHILDRENS };
+    Movie newGen1{ "신규세대 1", eEXAMPLE_GENRE };
+    Movie newGen2{ "신규세대 2", eEXAMPLE_GENRE };
 
     Customer customer{ "고객" };
 
