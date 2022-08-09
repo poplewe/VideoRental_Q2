@@ -8,13 +8,7 @@
 #include <sstream>
 #include "Rental.h"
 
-struct stPrintEach
-{
-	char szName[100] = "";
-	char szType[100] = "";
-	int iDayRent = 0;
-	double dAmount = 0;
-};
+
 
 // The customer class represents the customer of the store
 

@@ -9,7 +9,13 @@ using std::vector;
 Customer::Customer() {}
 
 Customer::Customer(const std::string& name) :
-	customerName(name) {}
+	customerName(name) 
+{
+	//default only print total Amounts & Points
+	bUseDetails = false;
+	bShowAmount = false;
+	bShowPoint = false;
+}
 
 void Customer::FindRentList()
 {
@@ -57,19 +63,23 @@ std::string  Customer::PrintReceiptDetails()
 	std::ostringstream result;
 	std::vector< Rental >::iterator iter = customerRentals.begin();
 	std::vector< Rental >::iterator iter_end = customerRentals.end();
-	stPrintEach PrintInfo;
+
 
 	result << "장르\t제목\t대여기간\t가격\t" << std::endl;
 	for (; iter != iter_end; ++iter)
 	{
 		Rental each = *iter;
-		strcpy_s(PrintInfo.szType, sizeof(PrintInfo.szType), each.getMovie().getTypeName());
-		strcpy_s(PrintInfo.szName, sizeof(PrintInfo.szName), each.getMovie().getTitle().c_str());
-		PrintInfo.iDayRent = each.getDaysRented();
-		PrintInfo.dAmount = each.getCalcAmount();
 
-		result << "(" << PrintInfo.szName << "\t" << PrintInfo.szName << "\t" 
-			<< PrintInfo.iDayRent << "\t" << PrintInfo.dAmount << ")" << std::endl;
+		result << "(" << each.getMovie().getTypeName() << "\t" << each.getMovie().getTitle() << "\t";
+		if (bShowAmount == true)
+		{
+			result << each.getCalcAmount() << '\t';
+		}
+		if (bShowPoint == true)
+		{
+			result << each.getCalcPoint() << '\t';
+		}
+		result<<each.getDaysRented() <<  ")" << std::endl;
 
 	}
 
@@ -113,6 +123,6 @@ std::string Customer::statement()
   result << "You earned " << dfrequentRenterPoints
          << " frequent renter points"<<std::endl;
   //add details
-  result << PrintReceiptDetails();
+  if(bUseDetails==true)  result << PrintReceiptDetails();
   return result.str();
 }
