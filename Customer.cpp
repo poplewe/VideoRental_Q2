@@ -9,7 +9,9 @@ using std::vector;
 Customer::Customer() {}
 
 Customer::Customer(const std::string& name) :
-	customerName(name) 
+	customerName(name) {}
+
+void Customer::FindRentList()
 {
 	char szFilename[100] = "";
 	string line;
@@ -21,7 +23,7 @@ Customer::Customer(const std::string& name) :
 	int iDataIdx = 0;
 
 	//Find Customer Rent List & Calc Amount & Point
-	sprintf_s(szFilename, "Customer\\%s.txt", name.c_str());
+	sprintf_s(szFilename, "Customer\\%s.txt", customerName.c_str());
 
 	file.open(szFilename);
 	if (file.is_open())
@@ -38,16 +40,14 @@ Customer::Customer(const std::string& name) :
 				iDataIdx++;
 				ptr = strtok_s(NULL, ",", &context);
 			}
-			int Movieindex=MovieSearch(szBuf[0]);
+			int Movieindex = MovieSearch(szBuf[0]);
 			int RentDays = atoi(szBuf[1]);
 			addRental({ MovieList[Movieindex],RentDays });
 		}
 	}
 	else cout << "Usable to open file" << endl;
 	file.close();
-
 }
-
 void Customer::addRental(const Rental& arg) { customerRentals.push_back(arg); }
 
 std::string Customer::getName() const { return customerName; }
@@ -85,7 +85,6 @@ std::string Customer::statement()
   std::vector< Rental >::iterator iter = customerRentals.begin();
   std::vector< Rental >::iterator iter_end = customerRentals.end();
 
-  int PrintSize = customerRentals.size();
 
   // result will be returned by statement()
   std::ostringstream result;

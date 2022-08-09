@@ -17,9 +17,11 @@ int main()
     LoadMovieList(MovieListFile);
     
     Customer customer{ "°í°´ 1" };
+    customer.FindRentList();
     cout << customer.statement() << endl;
 
     customer=Customer{ "°í°´ 2" };
+    customer.FindRentList();
     cout << customer.statement() << endl;
 
 

@@ -23,6 +23,7 @@ public:
   Customer();
   explicit Customer( const std::string& name );
 
+  void FindRentList();
   void addRental( const Rental& arg );
   std::string getName() const;
   //(장르 제목 대여기간 가격) print
@@ -30,6 +31,10 @@ public:
 
   // Generate a statement for the customer
   std::string statement();
+
+  bool bUseDetails;
+  bool bShowAmount;
+  bool bShowPoint;
 
 private:
   std::string customerName;
