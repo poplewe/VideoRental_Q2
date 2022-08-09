@@ -1,9 +1,10 @@
 // Customer.hh
 #ifndef CUSTOMER_H
 #define CUSTOMER_H
-
-#include <string>
+#include <iostream>
+#include <fstream>
 #include <vector>
+#include <string>
 #include <sstream>
 #include "Rental.h"
 

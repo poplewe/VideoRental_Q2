@@ -1,16 +1,52 @@
 // Customer.cc
-
-#include <vector>
 #include "Customer.h"
 
+
+using namespace std;
 using std::ostringstream;
 using std::vector;
-
 
 Customer::Customer() {}
 
 Customer::Customer(const std::string& name) :
-	customerName(name) {}
+	customerName(name) 
+{
+	char szFilename[100] = "";
+	string line;
+	char szline[256] = "";
+	ifstream file;
+	char szBuf[2][100] = { 0, };
+	char* ptr = NULL;
+	char* context = NULL;
+	int iDataIdx = 0;
+
+	//Find Customer Rent List & Calc Amount & Point
+	sprintf_s(szFilename, "Customer\\%s.txt", name.c_str());
+
+	file.open(szFilename);
+	if (file.is_open())
+	{
+		while (getline(file, line))
+		{
+			iDataIdx = 0;
+			strcpy_s(szline, sizeof(szline), line.c_str());
+			if ((szline[0] == '#') || (szline[0] == NULL)) continue;
+			ptr = strtok_s(szline, ",", &context);
+			while (ptr != NULL)
+			{
+				strcpy_s(szBuf[iDataIdx], sizeof(szBuf[iDataIdx]), ptr);
+				iDataIdx++;
+				ptr = strtok_s(NULL, ",", &context);
+			}
+			int Movieindex=MovieSearch(szBuf[0]);
+			int RentDays = atoi(szBuf[1]);
+			addRental({ MovieList[Movieindex],RentDays });
+		}
+	}
+	else cout << "Usable to open file" << endl;
+	file.close();
+
+}
 
 void Customer::addRental(const Rental& arg) { customerRentals.push_back(arg); }
 

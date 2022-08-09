@@ -1,0 +1,15 @@
+
+
+
+#title, type
+#type: 0-REGULAR, 1-NEW RELEASE, 2-CHILDRENS, 3-EXAMPLE_GENRE
+일반 1,0
+일반 2,0
+신작 1,1
+신작 2,1
+어린이 1,2
+어린이 2,2
+신규세대 1,3
+신규세대 2,3
+신규세대 3,3
+일반 3,0

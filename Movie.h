@@ -1,12 +1,16 @@
 // Movie.hh
 #ifndef MOVIE_H
 #define MOVIE_H
+#include <iostream>
+#include <fstream>
 #include <string>
 
+
+
+const char MovieTypeListFile[100] = "MovieType.txt";
+const char MovieListFile[100] = "MovieTitle.txt";
+
 const int iMax_Type = 4;
-
-
-
 /*
 	eREGULAR		= 0
     eNEW_RELEASE	= 1
@@ -23,7 +27,7 @@ enum eTypeNum
 };
 
 
-
+const int iType_Info_Num = 7;
 /*
 	m_szTypeName[100]			= typename
 	m_iBaseAmount				= baseAmount
@@ -44,22 +48,10 @@ struct STTYPEINFO
 	    double		m_dExtraPoint_PerDays;
 };
 
-const STTYPEINFO stMovieType[iMax_Type]=
-{
-	//{typename, baseAmount, base2extraDay(a), extratAmount(Per Day), basePoint, base2extraDay(p),extraPoint(Per Day)}
-	{ "REGULAR", 2, 2, 1.5, 1, 0, 0 },
-	{ "NEW_RELEASE", 3, 1, 3, 1, 1, 1 },
-	{ "CHILDRENS", 1.5, 3, 1.5, 1, 0, 0 },
-	{ "EXAMPLE_GENRE", 1, 1, 1.5, 1, 1, 1 }
-
-};
-
-
 class Movie {
 public:
 
-
-  Movie( const std::string& title, int priceCode = eREGULAR );
+  Movie( const std::string& title="", int priceCode = eREGULAR);
 
   int getPriceCode() const;
   void setPriceCode( int arg );
@@ -79,13 +71,20 @@ private:
   STTYPEINFO stMovieInfo;
 };
 
-inline Movie::Movie( const std::string& title, int priceCode ): 
-  movieTitle( title ),
-  moviePriceCode( priceCode )
-{
-	memcpy_s(&stMovieInfo, sizeof(struct STTYPEINFO), &stMovieType[priceCode], sizeof(struct STTYPEINFO));
-}
+extern int iTypeMax;
+extern STTYPEINFO* stMovieType;
+extern int iMovieListMax;
+extern Movie* MovieList;
 
 
+//common function
+const int FileDataCount(const char* FileName);
+//Load Movie Type
+void MovieTypeFileLoad(const char* FileName);
+void LoadTypeInfo(STTYPEINFO* TypeInfo, int TypeIdx, char* source);
+//Load Moive List
+void LoadMovieList(const char* FileName);
+//Movie Search
+int MovieSearch(char* MovieName);
 
 #endif // MOVIE_H
